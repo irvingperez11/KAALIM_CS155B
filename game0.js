@@ -393,7 +393,7 @@ function addEvilBalls()
 	{
 
 		var loader = new THREE.JSONLoader();
-		loader.load("../models/suzanne.json",
+		loader.load("models/suzanne.json",
 			function ( geometry, materials ) {
 				var material = new THREE.MeshLambertMaterial( { color: 0x8F260F } );
 				avatar = new THREE.Mesh( geometry, material );
@@ -554,25 +554,26 @@ function addEvilBalls()
 		}
 	}
 
-  function updateAvatar(){
-		"change the avatar's linear or angular velocity based on controls state (set by WSAD key presses)"
 
-		var forward = avatar.getWorldDirection();
+	  function updateAvatar(){
+			"change the avatar's linear or angular velocity based on controls state (set by WSAD key presses)"
 
-		if (controls.fwd){
-			avatar.setLinearVelocity(forward.multiplyScalar(controls.speed));
-		} else if (controls.bwd){
-			avatar.setLinearVelocity(forward.multiplyScalar(-controls.speed));
-		} else {
-			var velocity = avatar.getLinearVelocity();
-			velocity.x=velocity.z=0;
-			avatar.setLinearVelocity(velocity); //stop the xz motion
-		}
+			var forward = avatar.getWorldDirection();
+			if (controls.fwd){
+				avatar.setLinearVelocity(forward.multiplyScalar(controls.speed));
+			} else if (controls.bwd){
+				avatar.setLinearVelocity(forward.multiplyScalar(-controls.speed));
+			} else {
+				var velocity = 0;
+				velocity.x=velocity.z=0;
+				avatar.setLinearVelocity(velocity); //stop the xz motion
+			}
 
-    if (controls.fly){
-      avatar.setLinearVelocity(new THREE.Vector3(0,controls.speed,0));
-    }
+	    if (controls.fly){
+	      avatar.setLinearVelocity(new THREE.Vector3(0,controls.speed,0));
+	    }
 
+<<<<<<< HEAD
 		if (controls.left){
 			avatar.setAngularVelocity(new THREE.Vector3(0,controls.speed*0.1,0));
 		} else if (controls.right){
@@ -588,8 +589,20 @@ function addEvilBalls()
 			avatar.__dirtyPosition = true;
 			avatar.position.set(40,50,40);
 		}
+=======
+			if (controls.left){
+				avatar.setAngularVelocity(new THREE.Vector3(0,controls.speed*0.1,0));
+			} else if (controls.right){
+				avatar.setAngularVelocity(new THREE.Vector3(0,-controls.speed*0.1,0));
+			}
 
-	}
+	    if (controls.reset){
+	      avatar.__dirtyPosition = true;
+	      avatar.position.set(40,10,40);
+	    }
+>>>>>>> Commiy
+
+		}
 
 
 
