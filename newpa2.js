@@ -28,7 +28,7 @@ The user moves a cube around the board trying to knock balls into a cone
 				speed:10, fly:false, reset:false}
 
 	var gameState =
-	     {score:0, health:10, scene:'main', camera:'none' }
+	     {score:0, health:10, scene:'main', camera:'none', message:"" }
 
   init(); //
 	initControls();
