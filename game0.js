@@ -139,7 +139,7 @@ The user moves a cube around the board trying to knock balls into a cone
 							gameState.health += 1;  // add one to the score
 						}
 					})
-					scene.add(npc2);		
+					scene.add(npc2);
 
       var wall = createWall(0xffaa00,50,3,1);
       wall.position.set(10,0,10);
@@ -468,6 +468,9 @@ The user moves a cube around the board trying to knock balls into a cone
 			case "m": controls.speed = 10; break;
       case " ": controls.fly = false; break;
       case "h": controls.reset = false; break;
+			case "q": avatarCam.translateX(-1);break;
+			case "e": avatarCam.translateX(1);break;
+
 		}
 	}
 
