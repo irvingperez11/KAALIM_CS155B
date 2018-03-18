@@ -573,13 +573,12 @@ function addEvilBalls()
 	      avatar.setLinearVelocity(new THREE.Vector3(0,controls.speed,0));
 	    }
 
-<<<<<<< HEAD
 		if (controls.left){
 			avatar.setAngularVelocity(new THREE.Vector3(0,controls.speed*0.1,0));
 		} else if (controls.right){
 			avatar.setAngularVelocity(new THREE.Vector3(0,-controls.speed*0.1,0));
 		}
-	  	
+
 
     if (controls.reset){
       avatar.__dirtyPosition = true;
@@ -611,7 +610,7 @@ function addEvilBalls()
 		requestAnimationFrame( animate );
 
 		switch(gameState.scene) {
-				
+
 			case "start1":
 			//endText.rotateY(0.005);
 			renderer.render( startScene, startCamera );
