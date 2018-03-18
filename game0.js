@@ -468,8 +468,6 @@ The user moves a cube around the board trying to knock balls into a cone
 			case "m": controls.speed = 10; break;
       case " ": controls.fly = false; break;
       case "h": controls.reset = false; break;
-			case "q": avatarCam.translateX(-1);break;
-			case "e": avatarCam.translateX(1);break;
 
 		}
 	}
