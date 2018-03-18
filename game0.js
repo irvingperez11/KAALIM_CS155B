@@ -588,7 +588,7 @@ function addEvilBalls()
 			avatar.__dirtyPosition = true;
 			avatar.position.set(40,50,40);
 		}
-=======
+
 			if (controls.left){
 				avatar.setAngularVelocity(new THREE.Vector3(0,controls.speed*0.1,0));
 			} else if (controls.right){
@@ -599,7 +599,7 @@ function addEvilBalls()
 	      avatar.__dirtyPosition = true;
 	      avatar.position.set(40,10,40);
 	    }
->>>>>>> Commiy
+
 
 		}
 
