@@ -111,6 +111,7 @@ The user moves a cube around the board trying to knock balls into a cone
 
 
 			addBalls();
+			addEvilBalls();
 
 			cone = createConeMesh(4,6);
 			cone.position.set(10,3,7);
@@ -186,6 +187,28 @@ The user moves a cube around the board trying to knock balls into a cone
 			)
 		}
 	}
+function addEvilBalls()
+{
+    var numEvilBalls = 5;
+    for(i=0;i<numEvilBalls;i++)
+    {
+        var evilBall = createEvilBall();
+        evilBall.position.set(randN(20)+15,30,randN(20)+15);
+        scene.add(evilBall);
+        evilBall.addEventListener( 'collision',
+            function( other_object, relative_velocity, relative_rotation, contact_normal )
+            {
+                if (other_object==cone)
+                {
+                    console.log("Evil Ball "+i+" hit the cone");
+                    gameState.score -= 1;  // take one off the score
+                    this.position.y = this.position.y - 100;
+                    this.__dirtyPosition = true;
+                }
+            }
+        )
+    }
+}
 
 
 
@@ -345,10 +368,24 @@ The user moves a cube around the board trying to knock balls into a cone
 
 	}
 
-	function createAvatar(){
+	function createAvatar()
+	{
+
+		var loader = new THREE.JSONLoader();
+		loader.load("../models/suzanne.json",
+			function ( geometry, materials ) {
+				var material = new THREE.MeshLambertMaterial( { color: 0x8F260F } );
+				avatar = new THREE.Mesh( geometry, material );
+				scene.add(avatar);
+				var s = 0.5;
+			},
+			function(xhr){
+				console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );},
+			function(err){console.log("error in loading: "+err);}
+		)
 		//var geometry = new THREE.SphereGeometry( 4, 20, 20);
 		var geometry = new THREE.BoxGeometry( 5, 5, 6);
-		var material = new THREE.MeshLambertMaterial( { color: 0xffff00} );
+		var material = new THREE.MeshLambertMaterial( { color: 0x8F260F} );
 		var pmaterial = new Physijs.createMaterial(material,0.9,0.5);
 		//var mesh = new THREE.Mesh( geometry, material );
 		var mesh = new Physijs.BoxMesh( geometry, pmaterial );
@@ -393,10 +430,16 @@ The user moves a cube around the board trying to knock balls into a cone
 		mesh.castShadow = true;
 		return mesh;
 	}
-
-
-
-
+	function createEvilBall()
+	{
+    var geometry = new THREE.TorusGeometry( 1, 0.2, 16, 16);
+    var material = new THREE.MeshLambertMaterial( { color: 0xff0000} );
+    var pmaterial = new Physijs.createMaterial(material,0.9,0.95);
+    var mesh = new Physijs.BoxMesh( geometry, pmaterial );
+    mesh.setDamping(0.1,0.1);
+    mesh.castShadow = true;
+    return mesh;
+	}
 
 	var clock;
 
