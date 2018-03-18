@@ -278,8 +278,8 @@ function addEvilBalls()
 	}
 
   function initPhysijs(){
-    Physijs.scripts.worker = 'js/physijs_worker.js';
-    Physijs.scripts.ammo = 'js/ammo.js';
+    Physijs.scripts.worker = '../js/physijs_worker.js';
+    Physijs.scripts.ammo = '../js/ammo.js';
   }
 	/*
 		The renderer needs a size and the actual canvas we draw on
@@ -393,7 +393,7 @@ function addEvilBalls()
 	{
 
 		var loader = new THREE.JSONLoader();
-		loader.load("models/suzanne.json",
+		loader.load("../models/suzanne.json",
 			function ( geometry, materials ) {
 				var material = new THREE.MeshLambertMaterial( { color: 0x8F260F } );
 				var pmaterial = new Physijs.createMaterial(material,0.9,0.5);
