@@ -396,7 +396,10 @@ function addEvilBalls()
 		loader.load("../models/suzanne.json",
 			function ( geometry, materials ) {
 				var material = new THREE.MeshLambertMaterial( { color: 0x8F260F } );
-				avatar = new THREE.Mesh( geometry, material );
+				var pmaterial = new Physijs.createMaterial(material,0.9,0.5);
+				avatar = new Physijs.BoxMesh( geometry, material );
+				avatar.setDamping(0.1,0.1);
+				avatar.castShadow = true;
 				scene.add(avatar);
 				var s = 0.5;
 			},
@@ -404,26 +407,10 @@ function addEvilBalls()
 				console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );},
 			function(err){console.log("error in loading: "+err);}
 		)
-		//var geometry = new THREE.SphereGeometry( 4, 20, 20);
-		var geometry = new THREE.BoxGeometry( 5, 5, 6);
-		var material = new THREE.MeshLambertMaterial( { color: 0x8F260F} );
-		var pmaterial = new Physijs.createMaterial(material,0.9,0.5);
-		//var mesh = new THREE.Mesh( geometry, material );
-		var mesh = new Physijs.BoxMesh( geometry, pmaterial );
-		mesh.setDamping(0.1,0.1);
-		mesh.castShadow = true;
-
 		avatarCam.position.set(0,4,0);
 		avatarCam.lookAt(0,4,10);
-		mesh.add(avatarCam);
-
-  /*
-    var scoop1 = createBoxMesh2(0xff0000,10,1,0.1);
-		scoop1.position.set(0,-2,5);
-		mesh.add(scoop1);
-    */
-
-		return mesh;
+		avatar.add(avatarCam);
+		return avatar;
 	}
 
 
