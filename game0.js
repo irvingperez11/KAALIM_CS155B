@@ -25,7 +25,7 @@ The user moves a cube around the board trying to knock balls into a cone
 
 	var controls =
 	     {fwd:false, bwd:false, left:false, right:false,
-				speed:10, fly:false, reset:false,
+				speed:10, fly:false, reset:false, reset2:false,
 		    camera:camera}
 
 	var gameState =
@@ -507,6 +507,8 @@ function addEvilBalls()
           console.log("space!!");
           break;
       case "h": controls.reset = true; break;
+      case "0": controls.reset2 = true; break;
+
 
 
 			// switch cameras
@@ -538,6 +540,8 @@ function addEvilBalls()
 			case "m": controls.speed = 10; break;
       case " ": controls.fly = false; break;
       case "h": controls.reset = false; break;
+			case "0": controls.reset2 = false; break;
+
 
 		}
 	}
@@ -574,11 +578,16 @@ function addEvilBalls()
 		} else if (controls.right){
 			avatar.setAngularVelocity(new THREE.Vector3(0,-controls.speed*0.1,0));
 		}
+	  	
 
     if (controls.reset){
       avatar.__dirtyPosition = true;
       avatar.position.set(40,10,40);
     }
+	  		if (controls.reset2){
+			avatar.__dirtyPosition = true;
+			avatar.position.set(40,50,40);
+		}
 
 	}
 
