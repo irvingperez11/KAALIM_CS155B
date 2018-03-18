@@ -3,7 +3,6 @@
 Game 0
 This is a ThreeJS program which implements a simple game
 The user moves a cube around the board trying to knock balls into a cone
-
 */
 
 
@@ -117,11 +116,17 @@ The user moves a cube around the board trying to knock balls into a cone
 			cone.position.set(10,3,7);
 			scene.add(cone);
 
+			extrafeatureAnat = createConeMesh(10, 5);
+			extrafeatureAnat.position.set(0, 10, 3);
+			scene.add(extrafeatureAnat);
+
 			npc = createBoxMesh2(0x0000ff,1,2,4);
 			npc.position.set(30,5,-30);
       npc.addEventListener('collision',function(other_object){
         if (other_object==avatar){
-					gameState.health -= 1;  // add one to the score
+					gameState.health -= 1;
+					npc.__dirtyPosition = true;
+					npc.position.set(randN(30), randN(20), randN(40)); // add one to the score
 					if (gameState.health<5) {
 						gameState.message=" YOU NEED TO EAT!!";
 				}
@@ -519,9 +524,11 @@ function addEvilBalls()
 	}
 
 	function updateNPC(){
-		npc.lookAt(avatar.position);
-	  //npc.__dirtyPosition = true;
-		npc.setLinearVelocity(npc.getWorldDirection().multiplyScalar(0.5));
+		if (avatar.position.distanceTo(npc.position) <= 20) {
+			npc.__dirtyPosition = true;
+			npc.lookAt(avatar.position);
+			npc.setLinearVelocity(npc.getWorldDirection().multiplyScalar(0.5))
+		}
 	}
 
   function updateAvatar(){
