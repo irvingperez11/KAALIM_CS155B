@@ -16,6 +16,7 @@ The user moves a cube around the board trying to knock balls into a cone
 	var cone;
 	var npc;
 
+	var startScene, startCamera, startText;
 	var endwonScene, endloseScene, endCamera, endwinText, endloseText;
 
 
@@ -28,7 +29,7 @@ The user moves a cube around the board trying to knock balls into a cone
 		    camera:camera}
 
 	var gameState =
-	     {score:0, health:10, scene:'main', camera:'none', message:"" }
+	     {score:0, health:10, scene:'start1', camera:'none' }
 
 
 	// Here is the main game control
@@ -37,7 +38,18 @@ The user moves a cube around the board trying to knock balls into a cone
 	animate();  // start the animation loop!
 
 
+	function createStartScene(){
+		startScene = initScene();
+		startText = createSkyBox('start1.png',10);
+		startScene.add(startText);
+		var light1 = createPointLight();
+		light1.position.set(0,200,20);
+		startScene.add(light1);
+		startCamera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.1, 1000 );
+		startCamera.position.set(0,50,1);
+		startCamera.lookAt(0,0,0);
 
+	}
 
 	function createEndScene(){
 		endwonScene = initScene();
@@ -67,7 +79,8 @@ The user moves a cube around the board trying to knock balls into a cone
 	  To initialize the scene, we initialize each of its components
 	*/
 	function init(){
-      initPhysijs();
+			createStartScene();
+		        initPhysijs();
 			scene = initScene();
 			createEndScene();
 			initRenderer();
@@ -473,6 +486,12 @@ function addEvilBalls()
 			addBalls();
 			return;
 		}
+		if (gameState.scene == 'start1' && event.key=='s') {
+			gameState.scene = 'main';
+			gameState.score = 0;
+			addBalls();
+			return;
+		}
 
 		// this is the regular scene
 		switch (event.key){
@@ -570,6 +589,11 @@ function addEvilBalls()
 		requestAnimationFrame( animate );
 
 		switch(gameState.scene) {
+				
+			case "start1":
+			//endText.rotateY(0.005);
+			renderer.render( startScene, startCamera );
+			break;
 
 			case "youwon":
 				//endText.rotateY(0.005);
