@@ -397,10 +397,10 @@ function addEvilBalls()
 			function ( geometry, materials ) {
 				var material = new THREE.MeshLambertMaterial( { color: 0x8F260F } );
 				var pmaterial = new Physijs.createMaterial(material,0.9,0.5);
-				avatar = new Physijs.BoxMesh( geometry, material );
-				avatar.setDamping(0.1,0.1);
-				avatar.castShadow = true;
-				scene.add(avatar);
+				mesh = new Physijs.BoxMesh( geometry, material );
+				mesh.setDamping(0.1,0.1);
+				mesh.castShadow = true;
+				scene.add(mesh);
 				var s = 0.5;
 			},
 			function(xhr){
@@ -409,7 +409,7 @@ function addEvilBalls()
 		)
 		avatarCam.position.set(0,4,0);
 		avatarCam.lookAt(0,4,10);
-		avatar.add(avatarCam);
+		mesh.add(avatarCam);
 		return avatar;
 	}
 
