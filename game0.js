@@ -29,7 +29,7 @@ The user moves a cube around the board trying to knock balls into a cone
 		    camera:camera}
 
 	var gameState =
-	     {score:0, health:10, scene:'start1', camera:'none' }
+	     {score:0, health:10, scene:'start1', camera:'none', message:"" }
 
 
 	// Here is the main game control
