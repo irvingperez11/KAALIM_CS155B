@@ -29,7 +29,7 @@ The user moves a cube around the board trying to knock balls into a cone
 		    camera:camera}
 
 	var gameState =
-	     {score:0, health:10, scene:'main', camera:'none' }
+	     {score:0, health:10, scene:'main', camera:'none', message:"" }
 
 
 	// Here is the main game control
@@ -122,6 +122,9 @@ The user moves a cube around the board trying to knock balls into a cone
       npc.addEventListener('collision',function(other_object){
         if (other_object==avatar){
 					gameState.health -= 1;  // add one to the score
+					if (gameState.health<5) {
+						gameState.message=" YOU NEED TO EAT!!";
+				}
 					if (gameState.health==0) {
 						gameState.scene='youlose';
         }
@@ -591,6 +594,7 @@ function addEvilBalls()
 		info.innerHTML='<div style="font-size:24pt">Score: '
     + gameState.score
     + " health="+gameState.health
+		+ gameState.message
     + '</div>';
 
 	}
