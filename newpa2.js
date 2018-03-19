@@ -11,6 +11,7 @@ The user moves a cube around the board trying to knock balls into a cone
 	var scene, renderer;  // all threejs programs need these
 	var camera, avatarCam, edgeCam;  // we have two cameras in the main scene
 	var avatar;
+	var suzanne;
 	// here are some mesh objects ...
 
 	var cone;
@@ -106,12 +107,8 @@ The user moves a cube around the board trying to knock balls into a cone
 			// create the avatar
 			avatarCam = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.1, 1000 );
 			avatar = createAvatar();
-			avatar.translateY(20);
-			avatar.translateX(10);
-			avatar.translateZ(-12);
 			avatarCam.translateY(-4);
 			avatarCam.translateZ(-3);
-			scene.add(avatar);
 			gameState.camera = avatarCam;
 
       edgeCam = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -363,33 +360,33 @@ The user moves a cube around the board trying to knock balls into a cone
 
 	}
 
-	function createAvatar(){
-		//var geometry = new THREE.SphereGeometry( 4, 20, 20);
-		var geometry = new THREE.BoxGeometry( 5, 5, 6);
-		var texture = new THREE.TextureLoader().load( '../images/monkeyface.jpg' );
-		texture.wrapS = THREE.RepeatWrapping;
-		texture.wrapT = THREE.RepeatWrapping;
-		texture.repeat.set( 1, 1 );
-		var material = new THREE.MeshLambertMaterial( { color: 0xffffff, map:texture, side: THREE.DoubleSide} );
-		var pmaterial = new Physijs.createMaterial(material,0.9,0.5);
-		var mesh = new Physijs.BoxMesh( geometry, pmaterial );
-		mesh.setDamping(0.1,0.1);
-		mesh.castShadow = true;
+	function createAvatar()
+	{
+		var loader = new THREE.JSONLoader();
+		loader.load("../models/suzanne.json",
+					function ( geometry, materials ) {
+						console.log("loading suzanne");
+						var material = //materials[ 0 ];
+						new THREE.MeshLambertMaterial( { color: 0x620BBA } );
+						//geometry.scale.set(0.5,0.5,0.5);
+						suzanne = new Physijs.BoxMesh( geometry, material );
 
-		avatarCam.position.set(0,4,0);
-		avatarCam.lookAt(0,4,10);
-		mesh.add(avatarCam);
+						avatarCam = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.1, 1000 );
+						gameState.camera = avatarCam;
 
-		var scoop1 = createBoxMesh(0xff0000);
-		scoop1.scale.set(10,1,0.1);
-		//var scoop2 = createBoxMesh2(0xff0000,10,1,0.1);
-		scoop1.position.set(0,-2,5);
-		//scoop2.position.set(0,-3,5);
-		scoop1.rotation.set(0,Math.PI/6);
-		//scoop2.rotation.set(0,-Math.PI/6);
-		mesh.add(scoop1);
-		//mesh.add(scoop2);
-		return mesh;
+						avatarCam.position.set(0,4,0);
+						avatarCam.lookAt(0,4,8);
+						suzanne.add(avatarCam);
+						suzanne.position.set(-15,20,-20);
+						suzanne.scale.set(2,2,2);
+						suzanne.castShadow = true;
+						scene.add( suzanne  );
+						avatar=suzanne;
+					},
+					function(xhr){
+						console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );},
+					function(err){console.log("error in loading: "+err);}
+				)
 	}
 
 
