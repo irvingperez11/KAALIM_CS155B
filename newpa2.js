@@ -107,8 +107,6 @@ The user moves a cube around the board trying to knock balls into a cone
 			// create the avatar
 			avatarCam = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.1, 1000 );
 			avatar = createAvatar();
-			avatarCam.translateY(-4);
-			avatarCam.translateZ(-3);
 			gameState.camera = avatarCam;
 
       edgeCam = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -375,7 +373,7 @@ The user moves a cube around the board trying to knock balls into a cone
 						gameState.camera = avatarCam;
 
 						avatarCam.position.set(0,4,0);
-						avatarCam.lookAt(0,4,8);
+						avatarCam.lookAt(0,4,4);
 						suzanne.add(avatarCam);
 						suzanne.position.set(-15,20,-20);
 						suzanne.scale.set(2,2,2);
