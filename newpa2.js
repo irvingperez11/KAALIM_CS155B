@@ -460,19 +460,21 @@ The user moves a cube around the board trying to knock balls into a cone
 			case "s": controls.bwd = true; break;
 			case "a": controls.left = true; break;
 			case "d": controls.right = true; break;
-			case "r": controls.up = true; break;
+			case "t": controls.up = true; break;
 			case "f": controls.down = true; break;
 			case "m": controls.speed = 30; break;
+
       case " ": controls.fly = true;
           console.log("space!!");
           break;
       case "h": controls.reset = true; break;
 	  case "0": controls.reset2 = true; break;
+		case "r": avatar.rotation.set(0,0,0); avatar.__dirtyRotation = true;
 
 			// switch cameras
 			case "1": gameState.camera = camera; break;
 			case "2": gameState.camera = avatarCam; break;
-      		case "3": gameState.camera = edgeCam; break;
+      case "3": gameState.camera = edgeCam; break;
 			//move the avatar camera around
 			case "ArrowLeft": avatarCam.translateY(1);break;
 			case "ArrowRight": avatarCam.translateY(-1);break;
@@ -492,7 +494,7 @@ The user moves a cube around the board trying to knock balls into a cone
 			case "s": controls.bwd   = false; break;
 			case "a": controls.left  = false; break;
 			case "d": controls.right = false; break;
-			case "r": controls.up    = false; break;
+			case "r": avatar.rotation.set(0,0,0); avatar.__dirtyRotation = true;
 			case "f": controls.down  = false; break;
 			case "m": controls.speed = 10; break;
       case " ": controls.fly = false; break;
