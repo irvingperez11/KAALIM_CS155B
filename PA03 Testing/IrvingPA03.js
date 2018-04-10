@@ -1,4 +1,4 @@
-
+/*This is Irving's code for the sky box the game logic is in the actual game */
 var geometry = new THREE.CubeGeometry( 250, 250, 250 );
 var cubeMaterials = [
     new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( "img/nightsky_ft.png" ), side: THREE.DoubleSide }), //front side
