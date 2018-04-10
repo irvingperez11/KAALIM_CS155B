@@ -80,7 +80,7 @@ The user moves a cube around the board trying to knock balls into a cone
 	*/
 	function init(){
 			createStartScene();
-		        initPhysijs();
+		  initPhysijs();
 			scene = initScene();
 			createEndScene();
 			initRenderer();
@@ -466,7 +466,7 @@ function addEvilBalls()
 			addBalls();
 			return;
 		}
-		if (gameState.scene == 'start1' && event.key=='s') {
+		if (gameState.scene == 'start1' && event.key=='p') {
 			gameState.scene = 'main';
 			gameState.score = 0;
 			addBalls();
@@ -559,26 +559,14 @@ function addEvilBalls()
 			avatar.setAngularVelocity(new THREE.Vector3(0,-controls.speed*0.1,0));
 		}
 
-
     if (controls.reset){
       avatar.__dirtyPosition = true;
       avatar.position.set(40,10,40);
     }
-	  		if (controls.reset2){
+		if (controls.reset2){
 			avatar.__dirtyPosition = true;
 			avatar.position.set(40,50,40);
 		}
-
-			if (controls.left){
-				avatar.setAngularVelocity(new THREE.Vector3(0,controls.speed*0.1,0));
-			} else if (controls.right){
-				avatar.setAngularVelocity(new THREE.Vector3(0,-controls.speed*0.1,0));
-			}
-
-	    if (controls.reset){
-	      avatar.__dirtyPosition = true;
-	      avatar.position.set(40,10,40);
-	    }
 
 
 		}
@@ -601,10 +589,10 @@ function addEvilBalls()
 				renderer.render( endwonScene, endCamera );
 				break;
 
-				case "youlose":
-					//endText.rotateY(0.005);
-					renderer.render( endloseScene, endCamera );
-					break;
+			case "youlose":
+				//endText.rotateY(0.005);
+				renderer.render( endloseScene, endCamera );
+				break;
 
 			case "main":
 				updateAvatar();
