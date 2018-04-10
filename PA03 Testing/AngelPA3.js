@@ -256,12 +256,12 @@
 			case "m": controls.speed = 10; break;
       case " ": controls.fly = false; break;
       case "h": controls.reset = false; break;
-			case "i": controls.leftred = false;  break;
-      case "p": controls.rightred = false;  break;
-      case "o": controls.fwdred = false;  break;
-      case "l": controls.bwdred = false;  break;
-      case "n": controls.speedred = 10; break;
-      case "l": controls.downred = false; break;
+			case "ArrowLeft": controls.leftred = false;  break;
+			case "ArrowRight": controls.rightred = false;  break;
+			case "ArrowUp": controls.fwdred = false;  break;
+			case "ArrowDown": controls.bwdred = false;  break;
+			case "p": controls.speedred = 10; break;
+			case "l": controls.downred = false; break;
 			case "k": controls.flyred = false; break;
 			case "j": controls.resetred = false; break;
 		}
