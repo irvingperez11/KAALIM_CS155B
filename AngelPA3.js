@@ -234,14 +234,14 @@
 			case "1": gameState.camera = camera; break;
 			case "2": gameState.camera = blueAvatarCam; break; //designate the cameras
 			case "3": gameState.camera = redAvatarCam; break; //designate the cameras
-      case "ArrowLeft": blueAvatarCam.translateX(-1);break;
-      case "ArrowRight": blueAvatarCam.translateX(1);break;
-      case "ArrowUp": blueAvatarCam.translateY(1);break;
-      case "ArrowDown": blueAvatarCam.translateY(-1);break;
-      case "q": redAvatarCam.translateX(-1);break;
-      case "e": redAvatarCam.translateX(1);break;
-      case "z": redAvatarCam.translateY(-1);break;
-      case "c": redAvatarCam.translateY(1);break;
+      case "ArrowLeft": controls.leftred = true;  break;
+      case "ArrowRight": controls.rightred = true;  break;
+      case "ArrowUp": controls.fwdred = true;  break;
+      case "ArrowDown": controls.bwdred = true;  break;
+      case "p": controls.speedred = 30; break;
+      case "l": controls.downred = true; break;
+			case "k": controls.flyred = true; break;
+			case "j": controls.resetred = true; break;
 		}
 	}
 	function keyup(event)
@@ -256,10 +256,18 @@
 			case "m": controls.speed = 10; break;
       case " ": controls.fly = false; break;
       case "h": controls.reset = false; break;
+			case "i": controls.leftred = false;  break;
+      case "p": controls.rightred = false;  break;
+      case "o": controls.fwdred = false;  break;
+      case "l": controls.bwdred = false;  break;
+      case "n": controls.speedred = 10; break;
+      case "l": controls.downred = false; break;
+			case "k": controls.flyred = false; break;
+			case "j": controls.resetred = false; break;
 		}
 	}
 
-  function updateAvatar(avatar) //edited here so both avatars will move
+  function updateAvatarB(avatar) //edited here so both avatars will move
   {
 		"change the avatar's linear or angular velocity based on controls state (set by WSAD key presses)"
 
@@ -288,6 +296,35 @@
       avatar.position.set(40,10,40);
     }
 	}
+	function updateAvatarR(avatar) //edited here so both avatars will move
+  {
+		"change the avatar's linear or angular velocity based on controls state (set by WSAD key presses)"
+
+		var forward = avatar.getWorldDirection();
+		if (controls.fwdred){
+			avatar.setLinearVelocity(forward.multiplyScalar(controls.speed));
+		} else if (controls.bwdred){
+			avatar.setLinearVelocity(forward.multiplyScalar(-controls.speed));
+		} else {
+			var velocity = avatar.getLinearVelocity();
+			velocity.x=velocity.z=0;
+			avatar.setLinearVelocity(velocity); //stop the xz motion
+		}
+    if (controls.flyred){
+      avatar.setLinearVelocity(new THREE.Vector3(0,controls.speed,0));
+    }
+
+		if (controls.leftred){
+			avatar.setAngularVelocity(new THREE.Vector3(0,controls.speed*0.1,0));
+		} else if (controls.rightred){
+			avatar.setAngularVelocity(new THREE.Vector3(0,-controls.speed*0.1,0));
+		}
+
+    if (controls.resetred){
+      avatar.__dirtyPosition = true;
+      avatar.position.set(40,10,40);
+    }
+	}
 
 	function animate()
 	{
@@ -295,8 +332,8 @@
 		switch(gameState.scene) {
 
 			case "main":
-				updateAvatar(blueAvatar);
-				updateAvatar(redAvatar);
+				updateAvatarB(blueAvatar);
+				updateAvatarR(redAvatar);
 	    	scene.simulate();
 				if (gameState.camera!= 'none'){
 					renderer.render( scene, gameState.camera );
