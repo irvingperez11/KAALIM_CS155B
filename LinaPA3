@@ -1,9 +1,7 @@
 /*
-This is Maggie's code for pa3
-I added 1 avatar, changed the current avatar and added 2 sets of balls for the avatars to play with
-the blue avatar uses the purple balls to score points
-the red avatar uses the orange balls to score points
-first one to 10 points wins
+This is Lina's code for pa3
+I used maggie's code
+I added a npc to go after the avatars and decrease their health
 */
 
 	// First we declare the variables that hold the objects we need
