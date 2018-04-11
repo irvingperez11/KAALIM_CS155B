@@ -12,7 +12,6 @@ var blueNet, redNet;
 var clock;
 var npc;
 var startScene, startCamera, startText;
-var winScene, winCamera, winText;
 var endwonScene, endloseScene, endCamera, endwinText, endloseText;
 
 var controls =
@@ -89,15 +88,15 @@ function createMainScene()
 	// creates the shape
 	var geometry = new THREE.CubeGeometry( 250, 250, 250 );
 	var cubeMaterials = [
-		new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( "../images/nightsky_ft.png" ), side: THREE.DoubleSide }), //front side
-		new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( '../images/nightsky_bk.png' ), side: THREE.DoubleSide }), //back side
-		new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( '../images/nightsky_up.png' ), side: THREE.DoubleSide }), //up side
-		new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( '../images/nightsky_dn.png' ), side: THREE.DoubleSide }), //down side
-		new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( '../images/nightsky_rt.png' ), side: THREE.DoubleSide }), //right side
-		new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( '../images/nightsky_lf.png' ), side: THREE.DoubleSide }) //left side
+		new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( "images/nightsky_ft.png" ), side: THREE.DoubleSide }), //front side
+		new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( 'images/nightsky_bk.png' ), side: THREE.DoubleSide }), //back side
+		new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( 'images/nightsky_up.png' ), side: THREE.DoubleSide }), //up side
+		new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( 'images/nightsky_dn.png' ), side: THREE.DoubleSide }), //down side
+		new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( 'images/nightsky_rt.png' ), side: THREE.DoubleSide }), //right side
+		new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( 'images/nightsky_lf.png' ), side: THREE.DoubleSide }) //left side
 			];
 	// lighting
-	var ambientLight = new THREE.AmbientLight( 0xFFFFFF, 0.5 );
+	var ambientLight = new THREE.AmbientLight( 0xFFFFFF, 0.3 );
 	scene.add( ambientLight );
 
 	var cubeMaterial = new THREE.MeshFaceMaterial( cubeMaterials );
@@ -146,18 +145,12 @@ function createMainScene()
 				gameState.Redhealth -= 1;
 				npc.__dirtyPosition = true;
 				npc.position.set(randN(30), randN(20), randN(40)); //add one to the Score
-        if (gameState.Redhealth == 0){
-          gameState.scene='lose2';
-        }
 			}
 			if(other_object == blueAvatar)
 			{
 				gameState.Bluehealth -= 1;
 				npc.__dirtyPosition = true;
 				npc.position.set(randN(30), randN(20), randN(40)); //add one to the Score
-        if (gameState.Bluehealth == 0){
-          gameState.scene='lose2';
-        }
 			}
 		})
 	scene.add(npc);
@@ -274,7 +267,7 @@ function addPurpleBalls()
 				gameState.ScoreBlue += 1;  // add one to the score
 				if (gameState.ScoreBlue == 5)
 				{
-					gameState.scene='win2';
+					gameState.scene='youwon';
 				}
 				//gets rid of the ball just scored with
 				this.position.y = this.position.y - 100;
@@ -286,7 +279,7 @@ function addPurpleBalls()
 				gameState.ScoreRed += 1;  // add one to the score
 				if (gameState.ScoreRed == 5)
 				{
-					gameState.scene='win2';
+					gameState.scene='youwon';
 				}
 				//gets rid of the ball just scored with
 				this.position.y = this.position.y - 100;
@@ -358,6 +351,14 @@ function keydown(event)
 	case "1": gameState.camera = camera; break;
 	case "2": gameState.camera = blueAvatarCam; break; //designate the cameras
 	case "3": gameState.camera = redAvatarCam; break; //designate the cameras
+  case "ArrowLeft": controls.leftred = true;  break;
+  case "ArrowRight": controls.rightred = true;  break;
+  case "ArrowUp": controls.fwdred = true;  break;
+  case "ArrowDown": controls.bwdred = true;  break;
+  case "p": controls.speedred = 30; break;
+  case "l": controls.downred = true; break;
+  case "k": controls.flyred = true; break;
+  case "j": controls.resetred = true; break;
 	}
 }
 function keyup(event)
@@ -373,40 +374,74 @@ function keyup(event)
 		case "m": controls.speed = 10; break;
 		case " ": controls.fly = false; break;
 		case "h": controls.reset = false; break;
+    case "ArrowLeft": controls.leftred = false;  break;
+    case "ArrowRight": controls.rightred = false;  break;
+    case "ArrowUp": controls.fwdred = false;  break;
+    case "ArrowDown": controls.bwdred = false;  break;
+    case "p": controls.speedred = 10; break;
+    case "l": controls.downred = false; break;
+    case "k": controls.flyred = false; break;
+    case "j": controls.resetred = false; break;
 	}
 }
-function updateAvatar(avatar)
-{
-	var forward = avatar.getWorldDirection();
-	if (controls.fwd)
-	{
-		avatar.setLinearVelocity(forward.multiplyScalar(controls.speed));
-	} else if (controls.bwd)
-	{
-		avatar.setLinearVelocity(forward.multiplyScalar(-controls.speed));
-	} else
-	{
-		var velocity = avatar.getLinearVelocity();
-		velocity.x=velocity.z=0;
-		avatar.setLinearVelocity(velocity); //stop the xz motion
-	}
-    if (controls.fly)
-	{
+function updateAvatarB(avatar) //edited here so both avatars will move
+  {
+		"change the avatar's linear or angular velocity based on controls state (set by WSAD key presses)"
+
+		var forward = avatar.getWorldDirection();
+		if (controls.fwd){
+			avatar.setLinearVelocity(forward.multiplyScalar(controls.speed));
+		} else if (controls.bwd){
+			avatar.setLinearVelocity(forward.multiplyScalar(-controls.speed));
+		} else {
+			var velocity = avatar.getLinearVelocity();
+			velocity.x=velocity.z=0;
+			avatar.setLinearVelocity(velocity); //stop the xz motion
+		}
+    if (controls.fly){
       avatar.setLinearVelocity(new THREE.Vector3(0,controls.speed,0));
     }
-	if (controls.left)
-	{
-		avatar.setAngularVelocity(new THREE.Vector3(0,controls.speed*0.1,0));
-	} else if (controls.right)
-	{
-		avatar.setAngularVelocity(new THREE.Vector3(0,-controls.speed*0.1,0));
-	}
-    if (controls.reset)
-	{
-    	avatar.__dirtyPosition = true;
-    	avatar.position.set(40,10,40);
+
+		if (controls.left){
+			avatar.setAngularVelocity(new THREE.Vector3(0,controls.speed*0.1,0));
+		} else if (controls.right){
+			avatar.setAngularVelocity(new THREE.Vector3(0,-controls.speed*0.1,0));
+		}
+
+    if (controls.reset){
+      avatar.__dirtyPosition = true;
+      avatar.position.set(40,10,40);
     }
-}
+	}
+	function updateAvatarR(avatar) //edited here so both avatars will move
+  {
+		"change the avatar's linear or angular velocity based on controls state (set by WSAD key presses)"
+
+		var forward = avatar.getWorldDirection();
+		if (controls.fwdred){
+			avatar.setLinearVelocity(forward.multiplyScalar(controls.speed));
+		} else if (controls.bwdred){
+			avatar.setLinearVelocity(forward.multiplyScalar(-controls.speed));
+		} else {
+			var velocity = avatar.getLinearVelocity();
+			velocity.x=velocity.z=0;
+			avatar.setLinearVelocity(velocity); //stop the xz motion
+		}
+    if (controls.flyred){
+      avatar.setLinearVelocity(new THREE.Vector3(0,controls.speed,0));
+    }
+
+		if (controls.leftred){
+			avatar.setAngularVelocity(new THREE.Vector3(0,controls.speed*0.1,0));
+		} else if (controls.rightred){
+			avatar.setAngularVelocity(new THREE.Vector3(0,-controls.speed*0.1,0));
+		}
+
+    if (controls.resetred){
+      avatar.__dirtyPosition = true;
+      avatar.position.set(40,10,40);
+    }
+	}
 function updateNPC()
 {
 	if (redAvatar.position.distanceTo(npc.position) <= 20)
@@ -432,8 +467,8 @@ function animate()
 		break;
 
 		case "win2":
-			//endText.rotateY(0.005);
-      renderer.render( endwonScene, endCamera );
+			endText.rotateY(0.005);
+			renderer.render( endScene, endCamera );
 			break;
 
 		case "lose2":
@@ -442,7 +477,8 @@ function animate()
 			break;
 
 		case "main":
-		updateAvatar(blueAvatar);
+    updateAvatarB(blueAvatar);
+    updateAvatarR(redAvatar);
 		updateNPC();
 	    scene.simulate();
 		if (gameState.camera!= 'none')
