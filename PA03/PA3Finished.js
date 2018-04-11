@@ -88,15 +88,15 @@ function createMainScene()
 	// creates the shape
 	var geometry = new THREE.CubeGeometry( 250, 250, 250 );
 	var cubeMaterials = [
-		new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( "images/nightsky_ft.png" ), side: THREE.DoubleSide }), //front side
-		new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( 'images/nightsky_bk.png' ), side: THREE.DoubleSide }), //back side
-		new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( 'images/nightsky_up.png' ), side: THREE.DoubleSide }), //up side
-		new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( 'images/nightsky_dn.png' ), side: THREE.DoubleSide }), //down side
-		new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( 'images/nightsky_rt.png' ), side: THREE.DoubleSide }), //right side
-		new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( 'images/nightsky_lf.png' ), side: THREE.DoubleSide }) //left side
+		new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( "../images/nightsky_ft.png" ), side: THREE.DoubleSide }), //front side
+		new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( '../images/nightsky_bk.png' ), side: THREE.DoubleSide }), //back side
+		new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( '../images/nightsky_up.png' ), side: THREE.DoubleSide }), //up side
+		new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( '../images/nightsky_dn.png' ), side: THREE.DoubleSide }), //down side
+		new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( '../images/nightsky_rt.png' ), side: THREE.DoubleSide }), //right side
+		new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( '../images/nightsky_lf.png' ), side: THREE.DoubleSide }) //left side
 			];
 	// lighting
-	var ambientLight = new THREE.AmbientLight( 0xFFFFFF, 0.3 );
+	var ambientLight = new THREE.AmbientLight( 0xFFFFFF, 0.5 );
 	scene.add( ambientLight );
 
 	var cubeMaterial = new THREE.MeshFaceMaterial( cubeMaterials );
