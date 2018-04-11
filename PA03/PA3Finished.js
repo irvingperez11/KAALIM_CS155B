@@ -12,6 +12,7 @@ var blueNet, redNet;
 var clock;
 var npc;
 var startScene, startCamera, startText;
+var winScene, winCamera, winText;
 var endwonScene, endloseScene, endCamera, endwinText, endloseText;
 
 var controls =
@@ -145,12 +146,18 @@ function createMainScene()
 				gameState.Redhealth -= 1;
 				npc.__dirtyPosition = true;
 				npc.position.set(randN(30), randN(20), randN(40)); //add one to the Score
+        if (gameState.Redhealth == 0){
+          gameState.scene='lose2';
+        }
 			}
 			if(other_object == blueAvatar)
 			{
 				gameState.Bluehealth -= 1;
 				npc.__dirtyPosition = true;
 				npc.position.set(randN(30), randN(20), randN(40)); //add one to the Score
+        if (gameState.Bluehealth == 0){
+          gameState.scene='lose2';
+        }
 			}
 		})
 	scene.add(npc);
@@ -267,7 +274,7 @@ function addPurpleBalls()
 				gameState.ScoreBlue += 1;  // add one to the score
 				if (gameState.ScoreBlue == 5)
 				{
-					gameState.scene='youwon';
+					gameState.scene='win2';
 				}
 				//gets rid of the ball just scored with
 				this.position.y = this.position.y - 100;
@@ -279,7 +286,7 @@ function addPurpleBalls()
 				gameState.ScoreRed += 1;  // add one to the score
 				if (gameState.ScoreRed == 5)
 				{
-					gameState.scene='youwon';
+					gameState.scene='win2';
 				}
 				//gets rid of the ball just scored with
 				this.position.y = this.position.y - 100;
@@ -425,8 +432,8 @@ function animate()
 		break;
 
 		case "win2":
-			endText.rotateY(0.005);
-			renderer.render( endScene, endCamera );
+			//endText.rotateY(0.005);
+      renderer.render( endwonScene, endCamera );
 			break;
 
 		case "lose2":
