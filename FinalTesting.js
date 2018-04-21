@@ -255,7 +255,7 @@ function addPurpleBalls()
 	var numBalls = 15;
 	for(i=0;i<numBalls;i++)
 	{
-		var ball = createBall(0x620bba);
+		var ball = createBall(0xffffff);
 		ball.position.set(randN(20)-5,20,randN(20)-5);
 		scene.add(ball);
 		ball.addEventListener( 'collision',
@@ -291,8 +291,9 @@ function addPurpleBalls()
 }
 function createBall(color)
 {
-	var geometry = new THREE.SphereGeometry( 1, 16, 16);
-	var material = new THREE.MeshLambertMaterial( { color: color} );
+	var geometry = new THREE.SphereGeometry( 1, 16, 32);
+    var texture = new THREE.TextureLoader().load( '../images/RoundSoccerBall.png');
+    var material = new THREE.MeshLambertMaterial( { color: color,  map: texture ,side:THREE.FrontSide} );
 	var pmaterial = new Physijs.createMaterial(material,0.9,0.95);
 	var mesh = new Physijs.BoxMesh( geometry, pmaterial );
 	mesh.setDamping(0.1,0.1);
@@ -324,18 +325,21 @@ function initControls()
 function keydown(event)
 {
 	console.log("Keydown:"+event.key);
-	if ((gameState.scene == 'win2' && event.key=='r')||(gameState.scene == 'lose2' && event.key=='r')) {
+	if ((gameState.scene == 'win2' && event.key=='r')||(gameState.scene == 'lose2' && event.key=='r'))
+    {
 		gameState.scene = 'main';
 		gameState.score = 0;
 		gameState.health = 10;
 		return;
 	}
-	if (gameState.scene == 'start3' && event.key=='p') {
+	if (gameState.scene == 'start3' && event.key=='p')
+    {
 		gameState.scene = 'main';
 		gameState.score = 0;
 		return;
 	}
-	if (gameState.scene == 'main' && event.key=='u') {
+	if (gameState.scene == 'main' && event.key=='u')
+    {
 		gameState.scene = 'main';
 		gameState.score = 0;
 		return;
@@ -356,14 +360,14 @@ function keydown(event)
 	case "1": gameState.camera = camera; break;
 	case "2": gameState.camera = blueAvatarCam; break; //designate the cameras
 	case "3": gameState.camera = redAvatarCam; break; //designate the cameras
-  case "ArrowLeft": controls.leftred = true;  break;
-  case "ArrowRight": controls.rightred = true;  break;
-  case "ArrowUp": controls.fwdred = true;  break;
-  case "ArrowDown": controls.bwdred = true;  break;
-  case "p": controls.speedred = 30; break;
-  case "l": controls.downred = true; break;
-  case "k": controls.flyred = true; break;
-  case "j": controls.resetred = true; break;
+    case "ArrowLeft": controls.leftred = true;  break;
+    case "ArrowRight": controls.rightred = true;  break;
+    case "ArrowUp": controls.fwdred = true;  break;
+    case "ArrowDown": controls.bwdred = true;  break;
+    case "p": controls.speedred = 30; break;
+    case "l": controls.downred = true; break;
+    case "k": controls.flyred = true; break;
+    case "j": controls.resetred = true; break;
 	}
 }
 function keyup(event)
