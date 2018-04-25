@@ -64,6 +64,7 @@ function init()
 	createStartScene();
 	initPhysijs();
 	scene = initScene();
+  //initNets();
 	createEndScene();
 	initRenderer();
 	createMainScene();
@@ -122,18 +123,19 @@ function createMainScene()
 	//time to add balls
 	addPurpleBalls(); //for the both avatars to play with
 	//add in the nets
-	blueNet = createNet(0x44b4e2);
-	blueNet._dirtyPosition = true;
-	blueNet.position.set(50,5,0);
-	blueNet.rotateX(Math.PI/2);
-	blueNet.rotateZ(Math.PI/2);
-	scene.add(blueNet);
-	redNet = createNet(0xfa2a2a);
-	redNet._dirtyPosition = true;
-	redNet.position.set(-50,5,0);
-	redNet.rotateX(Math.PI/2);
-	redNet.rotateZ(Math.PI/2);
-	scene.add(redNet);
+  initNets();
+	// blueNet = createNet(0x44b4e2);
+	// blueNet._dirtyPosition = true;
+	// blueNet.position.set(50,5,0);
+	// blueNet.rotateX(Math.PI/2);
+	// blueNet.rotateZ(Math.PI/2);
+	// scene.add(blueNet);
+	// redNet = createNet(0xfa2a2a);
+	// redNet._dirtyPosition = true;
+	// redNet.position.set(-50,5,0);
+	// redNet.rotateX(Math.PI/2);
+	// redNet.rotateZ(Math.PI/2);
+	// scene.add(redNet);
 	npc = createBoxMesh(0x00ff00);
 	npc.position.set(30,5,-30);
 	npc.scale.set(1,2,4);
@@ -300,9 +302,9 @@ function createBall(color)
 	mesh.castShadow = true;
 	return mesh;
 }
-function createNet(color)
+function createNet(color, w, h, d)
 {
-	var geometry = new THREE.BoxGeometry(30, 8, 10);
+	var geometry = new THREE.BoxGeometry(w, h, d);
 	var texture = new THREE.TextureLoader().load( '../images/net.jpg' );
 	texture.wrapS = THREE.RepeatWrapping;
 	texture.wrapT = THREE.RepeatWrapping;
@@ -313,6 +315,59 @@ function createNet(color)
 	meshNet.castShadow = true;
 	return meshNet;
 }
+function initNets(){
+  blueNet = createNet(0x44b4e2, 30, 8, 1);
+  blueNet._dirtyPosition = true;
+  blueNet.position.set(50,3,0);
+  blueNet.rotateX(Math.PI/2);
+  blueNet.rotateY(Math.PI/2);
+  blueNet.rotateZ(Math.PI/2)
+  scene.add(blueNet);
+  blueNetFrame1 = createNet(0x44b4e2, 8, 8, 0.5);
+  blueNetFrame1._dirtyPosition = true;
+  blueNetFrame1.position.set(46,3,-15);
+  scene.add(blueNetFrame1);
+  blueNetFrame2 = createNet(0x44b4e2, 8, 8, 0.5);
+  blueNetFrame2._dirtyPosition = true;
+  blueNetFrame2.position.set(46,3,15);
+  scene.add(blueNetFrame2);
+  blueNetRoof = createNet(0x44b4e2, 30, 5, 0.5)
+  blueNetRoof._dirtyPosition = true;
+  blueNetRoof.position.set(46, 8, 0);
+  blueNetRoof.rotateZ(Math.PI/2);
+  blueNetRoof.rotateY(Math.PI/2);
+  blueNetRoof.rotateX(Math.PI/4);
+
+
+  scene.add(blueNetRoof)
+
+  redNet = createNet(0xfa2a2a, 30, 8, 1);
+  redNet._dirtyPosition = true;
+  redNet.position.set(-50,3,0);
+  redNet.rotateX(Math.PI/2);
+  redNet.rotateY(Math.PI/2);
+  redNet.rotateZ(Math.PI/2);
+  scene.add(redNet);
+  redNetFrame1 = createNet(0xfa2a2a, 8, 8, 0.5);
+  redNetFrame1._dirtyPosition = true;
+  redNetFrame1.position.set(-46,3,-15);
+  scene.add(redNetFrame1);
+  redNetFrame2 = createNet(0xfa2a2a, 8, 8, 0.5);
+  redNetFrame2._dirtyPosition = true;
+  redNetFrame2.position.set(-46,3,15);
+  scene.add(redNetFrame2);
+
+  redNetRoof = createNet(0xfa2a2a, 30, 5, 0.5)
+  redNetRoof._dirtyPosition = true;
+  redNetRoof.position.set(-46, 8, 0);
+  redNetRoof.rotateZ(Math.PI/2);
+  redNetRoof.rotateY(Math.PI/2);
+  redNetRoof.rotateX(-Math.PI/4);
+  scene.add(redNetRoof)
+	}
+
+
+
 function initControls()
 {
 	// here is where we create the eventListeners to respond to operations
