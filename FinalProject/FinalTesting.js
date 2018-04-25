@@ -10,7 +10,7 @@ var camera, blueAvatarCam, redAvatarCam;  // we have three cameras in the main s
 var blueAvatar, redAvatar; //to distinguish the avatars
 var blueNetB, redNetB;
 var clock;
-var npc;
+var rednpc, bluenpc;
 var startScene, startCamera, startText;
 var endwonScene, endloseScene, endCamera, endwinText, endloseText;
 
@@ -136,27 +136,45 @@ function createMainScene()
   redNetB.rotateX(Math.PI/2);
   redNetB.rotateZ(Math.PI);
   scene.add(redNetB);
-	npc = createBoxMesh(0x00ff00);
-	npc.position.set(30,5,-30);
-	npc.scale.set(1,2,4);
-	npc.addEventListener('collision',
-		function showEating (other_object)
-		{
-			if(other_object == redAvatar)
-			{
-				gameState.Redhealth -= 1;
-				npc.__dirtyPosition = true;
-				npc.position.set(randN(30), randN(20), randN(40)); //add one to the Score
-			}
-			if(other_object == blueAvatar)
-			{
-				gameState.Bluehealth -= 1;
-				npc.__dirtyPosition = true;
-				npc.position.set(randN(30), randN(20), randN(40)); //add one to the Score
-			}
-		})
-	scene.add(npc);
-}
+  rednpc = createBoxMesh(0xfa2a2a);
+  bluenpc= createBoxMesh(0x44b4e2);
+  rednpc.position.set(30,5,-30);
+  rednpc.scale.set(1,2,4);
+  rednpc.addEventListener('collision',
+    function showEating (other_object)
+    {
+      if(other_object == redAvatar)
+      {
+        gameState.Redhealth -= 1;
+        rednpc.__dirtyPosition = true;
+        rednpc.position.set(randN(30), randN(20), randN(40)); //add one to the Score
+      }
+      if (gameState.Redhealth==0) {
+        gameState.scene='lose2';
+      }
+
+    })
+  scene.add(rednpc);
+
+
+  bluenpc.position.set(-30,5,-30);
+  bluenpc.scale.set(1,2,4);
+  bluenpc.addEventListener('collision',
+  function showEating (other_object)
+  {
+    if(other_object == blueAvatar)
+    {
+      gameState.Bluehealth -= 1;
+      bluenpc.__dirtyPosition = true;
+      bluenpc.position.set(randN(30), randN(20), randN(40)); //add one to the Score
+    }
+    if (gameState.Bluehealth==0) {
+      gameState.scene='lose2';
+    }
+  })
+  scene.add(bluenpc);
+  }
+
 function randN(n)
 {
 	return Math.random()*n;
@@ -467,21 +485,23 @@ function updateAvatarB(avatar) //edited here so both avatars will move
       avatar.position.set(40,10,40);
     }
 	}
-function updateNPC()
-{
-	if (redAvatar.position.distanceTo(npc.position) <= 20)
-	{
-		npc.__dirtyPosition = true;
-		npc.lookAt(redAvatar.position);
-		npc.setLinearVelocity(npc.getWorldDirection().multiplyScalar(0.5))
-	}
-	if (blueAvatar.position.distanceTo(npc.position) <= 20)
-	{
-		npc.__dirtyPosition = true;
-		npc.lookAt(blueAvatar.position);
-		npc.setLinearVelocity(npc.getWorldDirection().multiplyScalar(0.5))
-	}
-}
+  function updateredNPC()
+  {
+
+  		rednpc.__dirtyPosition = true;
+  		rednpc.lookAt(redAvatar.position);
+  		rednpc.setLinearVelocity(rednpc.getWorldDirection().multiplyScalar(0.5))
+
+  }
+  function updateblueNPC()
+  {
+
+  		bluenpc.__dirtyPosition = true;
+  		bluenpc.lookAt(blueAvatar.position);
+  		bluenpc.setLinearVelocity(bluenpc.getWorldDirection().multiplyScalar(0.5))
+
+  }
+
 function animate()
 {
 	requestAnimationFrame( animate );
@@ -504,7 +524,8 @@ function animate()
 		case "main":
     updateAvatarB(blueAvatar);
     updateAvatarR(redAvatar);
-		updateNPC();
+    updateredNPC();
+		updateblueNPC();
 	    scene.simulate();
 		if (gameState.camera!= 'none')
 		{
