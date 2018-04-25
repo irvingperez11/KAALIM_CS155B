@@ -85,6 +85,7 @@ function createMainScene()
 	// create the ground and the skybox
 	var ground = createGround('Soccer-Field.jpg');
 	scene.add(ground);
+
 	// creates the shape
 	var geometry = new THREE.CubeGeometry( 250, 250, 250 );
 	var cubeMaterials = [
@@ -313,6 +314,14 @@ function createNet(color)
 	meshNet.castShadow = true;
 	return meshNet;
 }
+
+
+// ...
+
+function clearScene() {
+    scene.set(main)
+	
+}
 function initControls()
 {
 	// here is where we create the eventListeners to respond to operations
@@ -367,7 +376,12 @@ function keydown(event)
     case "p": controls.speedred = 30; break;
     case "l": controls.downred = true; break;
     case "k": controls.flyred = true; break;
-    case "j": controls.resetred = true; break;
+	case "j": controls.resetred = true; break;
+	case "p":	gameState.score = 0;
+				gameState.health = 10;
+				scene.add(createBall());
+				break;
+	 
 	}
 }
 function keyup(event)

@@ -416,7 +416,11 @@ function updateAvatarB(avatar) //edited here so both avatars will move
     if (controls.reset){
       avatar.__dirtyPosition = true;
 	  avatar.position.set(40,10,40);
-	  gameState.scene = main;
+	
+	  while(scene.children.length > 0){ 
+		scene.remove(scene.children[0]); 
+		}
+		gameState.scene = main;
     }
 	}
 	function updateAvatarR(avatar) //edited here so both avatars will move
