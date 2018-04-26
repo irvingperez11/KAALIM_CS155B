@@ -771,7 +771,7 @@ function animate()
 			break;
 
 		case "main":
-    
+    gameState.camera = camera;
     updateAvatarB(blueAvatar);
     updateAvatarR(redAvatar);
     updateredNPC();
