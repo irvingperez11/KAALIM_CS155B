@@ -8,6 +8,9 @@ var camera, blueAvatarCam, redAvatarCam;  // we have three cameras in the main s
 var blueAvatar, redAvatar; //to distinguish the avatars
 var blueNetB, redNetB;
 var clock;
+var npc;
+var wall1, wall2, wall3, wall4;
+var goalie1,goalie2;
 var rednpc, bluenpc;
 var startScene, startCamera, startText;
 var endwonScene, endloseScene, endCamera, endwinText, endloseText;
@@ -119,6 +122,7 @@ function createMainScene()
 	scene.add(redAvatar);
 	//time to add balls
 	addPurpleBalls(); //for the both avatars to play with
+  addEvilBalls();
 	//add in the nets
     blueNetB = createNetB(0x44b4e2);
     blueNetB._dirtyPosition = true;
@@ -134,6 +138,98 @@ function createMainScene()
     redNetB.rotateX(Math.PI/2);
     redNetB.rotateZ(Math.PI);
     scene.add(redNetB);
+    wall1 = createBoxMesh1('wall.png');
+  	wall1.position.set(-48,0,12);
+  	wall1.addEventListener('collision',
+  		function showEating (other_object)
+  		{
+  			if(other_object == redAvatar)
+  			{
+  				gameState.Redhealth -= 1;
+  			}
+  			if(other_object == blueAvatar)
+  			{
+  				gameState.Bluehealth -= 1;
+  		}
+  	})
+  	scene.add(wall1);
+  	wall2 = createBoxMesh1('wall.png');
+  	wall2.position.set(-48,0,-12);
+  	wall2.addEventListener('collision',
+  		function showEating (other_object)
+  		{
+  			if(other_object == redAvatar)
+  			{
+  				gameState.Redhealth -= 1;
+  			}
+  			if(other_object == blueAvatar)
+  			{
+  				gameState.Bluehealth -= 1;
+  		}
+  	})
+  	scene.add(wall2);
+  	wall3 = createBoxMesh1('wall.png');
+  	wall3.position.set(48,0,12);
+  	wall3.addEventListener('collision',
+  		function showEating (other_object)
+  		{
+  			if(other_object == redAvatar)
+  			{
+  				gameState.Redhealth -= 1;
+  			}
+  			if(other_object == blueAvatar)
+  			{
+  				gameState.Bluehealth -= 1;
+  		}
+  	})
+  	scene.add(wall3);
+  	wall4 = createBoxMesh1('wall.png');
+  	wall4.position.set(48,0,-12);
+  	wall4.addEventListener('collision',
+  		function showEating (other_object)
+  		{
+  			if(other_object == redAvatar)
+  			{
+  				gameState.Redhealth -= 1;
+  			}
+  			if(other_object == blueAvatar)
+  			{
+  				gameState.Bluehealth -= 1;
+  		}
+  	})
+  	scene.add(wall4);
+  	goalie1 = createConeMesh2(0xffff00);
+  	goalie1.position.set(-60,5,-4);
+  	goalie1.addEventListener('collision',
+  		function showEating (other_object)
+  		{
+  			if(other_object == redAvatar)
+  			{
+  				redAvatar.__dirtyPosition = true;
+  				redAvatar.__dirtyRotation = true;
+  				redAvatar.position.set(randN(20), randN(10), randN(10));
+  				goalie1.__dirtyPosition = true;
+  				goalie1.__dirtyRotation = true;
+  				goalie1.position.set(-60,5,-4);
+  			}
+  		})
+  	scene.add(goalie1);
+  	goalie2 = createConeMesh2(0xffff00);
+  	goalie2.position.set(60,5,4);
+  	goalie2.addEventListener('collision',
+  		function showEating (other_object)
+  		{
+  			if(other_object == blueAvatar)
+  			{
+  				blueAvatar.__dirtyPosition = true;
+  				blueAvatar.__dirtyRotation = true;
+  				blueAvatar.position.set(randN(20), randN(10), randN(10));
+  				goalie2.__dirtyPosition = true;
+  				goalie2.__dirtyRotation = true;
+  				goalie2.position.set(60,5,4);
+  			}
+  		})
+  	scene.add(goalie2);
     rednpc = createBoxMesh(0xfa2a2a);
     bluenpc= createBoxMesh(0x44b4e2);
     rednpc.position.set(30,5,-30);
@@ -171,6 +267,26 @@ function createMainScene()
     }
   })
   scene.add(bluenpc);
+  npc = createConeMesh('fire.png'); // npc power is very strong
+	npc.position.set(30,5,-30);
+	npc.scale.set(1,2,4);
+	npc.addEventListener('collision',
+		function showEating (other_object)
+		{
+			if(other_object == redAvatar)
+			{
+				gameState.Redhealth -= 1;
+				npc.__dirtyPosition = true;
+				npc.position.set(randN(30), randN(20), randN(40));
+			}
+			if(other_object == blueAvatar)
+			{
+				gameState.Bluehealth -= 1;
+				npc.__dirtyPosition = true;
+				npc.position.set(randN(30), randN(20), randN(40));
+			}
+		})
+	scene.add(npc);
   }
 
 function randN(n)
@@ -206,6 +322,39 @@ function createPointLight()
 	light.shadow.camera.near = 0.5;       // default
 	light.shadow.camera.far = 500      // default
 	return light;
+}
+function createConeMesh(image)
+{
+	var geometry = new THREE.ConeGeometry( 0.5, 2, 6);
+	var texture = new THREE.TextureLoader().load( '../images/'+image );
+	texture.wrapS = THREE.RepeatWrapping;
+	texture.wrapT = THREE.RepeatWrapping;
+	texture.repeat.set( 1, 1 );
+	var material = new THREE.MeshLambertMaterial( {  color: 0xffffff,  map: texture ,side:THREE.DoubleSide } );
+	mesh = new Physijs.BoxMesh( geometry, material );
+	mesh.castShadow = true;
+	return mesh;
+}
+function createConeMesh2(color)
+{
+	var geometry = new THREE.ConeGeometry( 1, 2, 6);
+	var material = new THREE.MeshLambertMaterial( { color: color} );
+	var pmaterial = new Physijs.createMaterial(material,0.9,0.5);
+	var mesh = new Physijs.BoxMesh( geometry, pmaterial );
+	mesh.setDamping(0.1,0.1);
+	mesh.castShadow = true;
+	return mesh;
+}
+function createBoxMesh1(image){
+	var geometry = new THREE.BoxGeometry(2,8,12);
+	var texture = new THREE.TextureLoader().load( '../images/'+image );
+	texture.wrapS = THREE.RepeatWrapping;
+	texture.wrapT = THREE.RepeatWrapping;
+	texture.repeat.set( 1, 1 );
+	var material = new THREE.MeshLambertMaterial( {  color: 0xffffff,  map: texture ,side:THREE.DoubleSide } );
+	mesh = new Physijs.BoxMesh( geometry, material,0 );
+	mesh.castShadow = true;
+	return mesh;
 }
 function createBoxMesh(color)
 {
@@ -350,6 +499,45 @@ function createBall(color)
 	mesh.setDamping(0.1,0.1);
 	mesh.castShadow = true;
 	return mesh;
+}
+function addEvilBalls()
+{
+	var numBalls = 5;
+	for(i=0;i<numBalls;i++)
+	{
+		var ball = createBall(0x8B0000);
+		ball.position.set(randN(20)-10,20,randN(20)-10);
+		scene.add(ball);
+		ball.addEventListener( 'collision',
+		function( other_object, relative_velocity, relative_rotation, contact_normal )
+		{
+			if (other_object==blueAvatar)
+			{
+				console.log("blue avatar hits evil balls");
+				gameState.ScoreBlue -= 1;  // minus one to the score
+				if (gameState.ScoreBlue == 0)
+				{
+					gameState.scene='STOP touching the evil balls!!';
+				}
+				//gets rid of the ball just scored with
+				this.position.y = this.position.y - 100;
+				this.__dirtyPosition = true;
+			}
+			if (other_object==redAvatar)
+			{
+				console.log("red avatar hits evil balls");
+				gameState.ScoreRed -= 1;  // minus one to the score
+				if (gameState.ScoreRed == 0)
+				{
+					gameState.scene='STOP touching the evil balls!!';
+				}
+				//gets rid of the ball just scored with
+				this.position.y = this.position.y - 100;
+				this.__dirtyPosition = true;
+			}
+		}
+	)
+	}
 }
 function createNet(color)
 {
@@ -532,6 +720,36 @@ function updateAvatarB(avatar) //edited here so both avatars will move
   		bluenpc.setLinearVelocity(bluenpc.getWorldDirection().multiplyScalar(0.5))
 
   }
+  function updateNPC() //this npc's power is very strong
+  {
+  	if (redAvatar.position.distanceTo(npc.position) <= 40)
+  	{
+  		npc.__dirtyPosition = true;
+  		npc.lookAt(redAvatar.position);
+  		npc.setLinearVelocity(npc.getWorldDirection().multiplyScalar(3.6))
+  	}
+  	if (blueAvatar.position.distanceTo(npc.position) <= 20) //only moves when the distance is within 20, but if hits npc, health decreased by 2
+  	{
+  		npc.__dirtyPosition = true;
+  		npc.lookAt(blueAvatar.position);
+  		npc.setLinearVelocity(npc.getWorldDirection().multiplyScalar(3.6))
+  	}
+  }
+  function updateGoalie()
+  {
+  	if (redAvatar.position.distanceTo(goalie1.position) <= 20)
+  	{
+  		goalie1.__dirtyPosition = true;
+  		goalie1.lookAt(redAvatar.position);
+  		goalie1.setLinearVelocity(goalie1.getWorldDirection().multiplyScalar(3.6))
+  	}
+  	if (blueAvatar.position.distanceTo(goalie2.position) <= 20) //only moves when the distance is within 20, but if hits npc, health decreased by 2
+  	{
+  		goalie2.__dirtyPosition = true;
+  		goalie2.lookAt(blueAvatar.position);
+  		goalie2.setLinearVelocity(goalie2.getWorldDirection().multiplyScalar(3.6))
+  	}
+  }
 
 function animate()
 {
@@ -557,6 +775,8 @@ function animate()
     updateAvatarR(redAvatar);
     updateredNPC();
 		updateblueNPC();
+    updateGoalie();
+		updateNPC();
 	    scene.simulate();
 		if (gameState.camera!= 'none')
 		{
