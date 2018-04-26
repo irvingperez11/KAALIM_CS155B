@@ -140,63 +140,63 @@ function createMainScene()
     scene.add(redNetB);
     wall1 = createBoxMesh1('wall.png');
   	wall1.position.set(-48,0,12);
-  	wall1.addEventListener('collision',
-  		function showEating (other_object)
-  		{
-  			if(other_object == redAvatar)
-  			{
-  				gameState.Redhealth -= 1;
-  			}
-  			if(other_object == blueAvatar)
-  			{
-  				gameState.Bluehealth -= 1;
-  		}
-  	})
+  //	wall1.addEventListener('collision',
+  	//	function showEating (other_object)
+  	//	{
+  	//		if(other_object == redAvatar)
+  	//		{
+  	//			gameState.Redhealth -= 1;
+  	//		}
+  	//		if(other_object == blueAvatar)
+  	//		{
+  	//			gameState.Bluehealth -= 1;
+  	//	}
+  //	})
   	scene.add(wall1);
   	wall2 = createBoxMesh1('wall.png');
   	wall2.position.set(-48,0,-12);
-  	wall2.addEventListener('collision',
-  		function showEating (other_object)
-  		{
-  			if(other_object == redAvatar)
-  			{
-  				gameState.Redhealth -= 1;
-  			}
-  			if(other_object == blueAvatar)
-  			{
-  				gameState.Bluehealth -= 1;
-  		}
-  	})
+  //	wall2.addEventListener('collision',
+  	//	function showEating (other_object)
+  		//{
+  			//if(other_object == redAvatar)
+  			//{
+  		//		gameState.Redhealth -= 1;
+  		//	}
+  		//	if(other_object == blueAvatar)
+  		//	{
+  		//		gameState.Bluehealth -= 1;
+  	//	}
+  //	})
   	scene.add(wall2);
   	wall3 = createBoxMesh1('wall.png');
   	wall3.position.set(48,0,12);
-  	wall3.addEventListener('collision',
-  		function showEating (other_object)
-  		{
-  			if(other_object == redAvatar)
-  			{
-  				gameState.Redhealth -= 1;
-  			}
-  			if(other_object == blueAvatar)
-  			{
-  				gameState.Bluehealth -= 1;
-  		}
-  	})
+  //	wall3.addEventListener('collision',
+  	//	function showEating (other_object)
+  	//	{
+  	//		if(other_object == redAvatar)
+  	//		{
+  	//			gameState.Redhealth -= 1;
+  	//		}
+  	//		if(other_object == blueAvatar)
+  	//		{
+  	//			gameState.Bluehealth -= 1;
+  	//	}
+  //	})
   	scene.add(wall3);
   	wall4 = createBoxMesh1('wall.png');
   	wall4.position.set(48,0,-12);
-  	wall4.addEventListener('collision',
-  		function showEating (other_object)
-  		{
-  			if(other_object == redAvatar)
-  			{
-  				gameState.Redhealth -= 1;
-  			}
-  			if(other_object == blueAvatar)
-  			{
-  				gameState.Bluehealth -= 1;
-  		}
-  	})
+  //	wall4.addEventListener('collision',
+  //		function showEating (other_object)
+  //		{
+  //			if(other_object == redAvatar)
+  //			{
+  	//			gameState.Redhealth -= 1;
+  	//		}
+  	//		if(other_object == blueAvatar)
+  		//	{
+  			//	gameState.Bluehealth -= 1;
+  	//	}
+  //	})
   	scene.add(wall4);
   	goalie1 = createConeMesh2(0xffff00);
   	goalie1.position.set(-60,5,-4);
@@ -213,7 +213,7 @@ function createMainScene()
   				goalie1.position.set(-60,5,-4);
   			}
   		})
-  	scene.add(goalie1);
+  	//scene.add(goalie1);
   	goalie2 = createConeMesh2(0xffff00);
   	goalie2.position.set(60,5,4);
   	goalie2.addEventListener('collision',
@@ -229,7 +229,7 @@ function createMainScene()
   				goalie2.position.set(60,5,4);
   			}
   		})
-  	scene.add(goalie2);
+  	//scene.add(goalie2);
     rednpc = createBoxMesh(0xfa2a2a);
     bluenpc= createBoxMesh(0x44b4e2);
     rednpc.position.set(30,5,-30);
@@ -286,7 +286,7 @@ function createMainScene()
 				npc.position.set(randN(30), randN(20), randN(40));
 			}
 		})
-	scene.add(npc);
+	//scene.add(npc);
   }
 
 function randN(n)
@@ -771,12 +771,13 @@ function animate()
 			break;
 
 		case "main":
+    
     updateAvatarB(blueAvatar);
     updateAvatarR(redAvatar);
     updateredNPC();
 		updateblueNPC();
-    updateGoalie();
-		updateNPC();
+    //updateGoalie();
+		//updateNPC();
 	    scene.simulate();
 		if (gameState.camera!= 'none')
 		{
