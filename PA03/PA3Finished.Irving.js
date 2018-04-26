@@ -364,6 +364,10 @@ function keydown(event)
   case "l": controls.downred = true; break;
   case "k": controls.flyred = true; break;
   case "j": controls.resetred = true; break;
+  case "F5": while(scene.children.length > 0){ 
+   			 scene.remove(scene.children[0]); 
+			}
+			break;
 	}
 }
 function keyup(event)
@@ -416,7 +420,11 @@ function updateAvatarB(avatar) //edited here so both avatars will move
     if (controls.reset){
       avatar.__dirtyPosition = true;
 	  avatar.position.set(40,10,40);
-	  gameState.scene = main;
+	
+	  while(scene.children.length > 0){ 
+		scene.remove(scene.children[0]); 
+		}
+		gameState.scene = main;
     }
 	}
 	function updateAvatarR(avatar) //edited here so both avatars will move

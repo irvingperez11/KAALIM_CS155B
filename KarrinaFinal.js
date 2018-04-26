@@ -85,6 +85,7 @@ function createMainScene()
 	// create the ground and the skybox
 	var ground = createGround('grass.png');
 	scene.add(ground);
+
 	// creates the shape
 	var geometry = new THREE.CubeGeometry( 250, 250, 250 );
 	var cubeMaterials = [
@@ -341,6 +342,14 @@ function createNetB(color)
 	meshNet.castShadow = true;
 	return meshNet;
 }
+
+
+// ...
+
+function clearScene() {
+    scene.set(main)
+	
+}
 function initControls()
 {
 	// here is where we create the eventListeners to respond to operations
@@ -380,6 +389,21 @@ function keydown(event)
 	case "1": gameState.camera = camera; break;
 	case "2": gameState.camera = blueAvatarCam; break; //designate the cameras
 	case "3": gameState.camera = redAvatarCam; break; //designate the cameras
+<<<<<<< HEAD:FinalTesting.js
+    case "ArrowLeft": controls.leftred = true;  break;
+    case "ArrowRight": controls.rightred = true;  break;
+    case "ArrowUp": controls.fwdred = true;  break;
+    case "ArrowDown": controls.bwdred = true;  break;
+    case "p": controls.speedred = 30; break;
+    case "l": controls.downred = true; break;
+    case "k": controls.flyred = true; break;
+	case "j": controls.resetred = true; break;
+	case "p":	gameState.score = 0;
+				gameState.health = 10;
+				scene.add(createBall());
+				break;
+	 
+=======
   case "ArrowLeft": controls.leftred = true;  break;
   case "ArrowRight": controls.rightred = true;  break;
   case "ArrowUp": controls.fwdred = true;  break;
@@ -388,6 +412,7 @@ function keydown(event)
   case "l": controls.downred = true; break;
   case "k": controls.flyred = true; break;
   case "j": controls.resetred = true; break;
+>>>>>>> ed3cb1873bc5dc85d6ec55f8803f4dfd651584ce:KarrinaFinal.js
 	}
 }
 function keyup(event)
