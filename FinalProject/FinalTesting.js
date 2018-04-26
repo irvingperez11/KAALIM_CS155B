@@ -8,9 +8,9 @@ First player to get a score of 5 in their color wins without being killed by the
 var scene, renderer;  // all threejs programs need these
 var camera, blueAvatarCam, redAvatarCam;  // we have three cameras in the main scene
 var blueAvatar, redAvatar; //to distinguish the avatars
-var blueNet, redNet;
+var blueNetB, redNetB;
 var clock;
-var npc;
+var rednpc, bluenpc;
 var startScene, startCamera, startText;
 var endwonScene, endloseScene, endCamera, endwinText, endloseText;
 
@@ -85,7 +85,6 @@ function createMainScene()
 	// create the ground and the skybox
 	var ground = createGround('Soccer-Field.jpg');
 	scene.add(ground);
-
 	// creates the shape
 	var geometry = new THREE.CubeGeometry( 250, 250, 250 );
 	var cubeMaterials = [
@@ -123,39 +122,59 @@ function createMainScene()
 	//time to add balls
 	addPurpleBalls(); //for the both avatars to play with
 	//add in the nets
-	blueNet = createNet(0x44b4e2);
-	blueNet._dirtyPosition = true;
-	blueNet.position.set(50,5,0);
-	blueNet.rotateX(Math.PI/2);
-	blueNet.rotateZ(Math.PI/2);
-	scene.add(blueNet);
-	redNet = createNet(0xfa2a2a);
-	redNet._dirtyPosition = true;
-	redNet.position.set(-50,5,0);
-	redNet.rotateX(Math.PI/2);
-	redNet.rotateZ(Math.PI/2);
-	scene.add(redNet);
-	npc = createBoxMesh(0x00ff00);
-	npc.position.set(30,5,-30);
-	npc.scale.set(1,2,4);
-	npc.addEventListener('collision',
-		function showEating (other_object)
-		{
-			if(other_object == redAvatar)
-			{
-				gameState.Redhealth -= 1;
-				npc.__dirtyPosition = true;
-				npc.position.set(randN(30), randN(20), randN(40)); //add one to the Score
-			}
-			if(other_object == blueAvatar)
-			{
-				gameState.Bluehealth -= 1;
-				npc.__dirtyPosition = true;
-				npc.position.set(randN(30), randN(20), randN(40)); //add one to the Score
-			}
-		})
-	scene.add(npc);
-}
+  blueNetB = createNetB(0x44b4e2);
+  blueNetB._dirtyPosition = true;
+  blueNetB.position.set(51,-3,0);
+  blueNetB.rotateX(Math.PI/2);
+  blueNetB.rotateZ(Math.PI);
+  scene.add(blueNetB);
+
+  redNetB = createNetB(0xfa2a2a);
+  redNetB._dirtyPosition = true;
+  redNetB.position.set(-51,-3,0);
+  redNetB.rotateY(Math.PI);
+  redNetB.rotateX(Math.PI/2);
+  redNetB.rotateZ(Math.PI);
+  scene.add(redNetB);
+  rednpc = createBoxMesh(0xfa2a2a);
+  bluenpc= createBoxMesh(0x44b4e2);
+  rednpc.position.set(30,5,-30);
+  rednpc.scale.set(1,2,4);
+  rednpc.addEventListener('collision',
+    function showEating (other_object)
+    {
+      if(other_object == redAvatar)
+      {
+        gameState.Redhealth -= 1;
+        rednpc.__dirtyPosition = true;
+        rednpc.position.set(randN(30), randN(20), randN(40)); //add one to the Score
+      }
+      if (gameState.Redhealth==0) {
+        gameState.scene='lose2';
+      }
+
+    })
+  scene.add(rednpc);
+
+
+  bluenpc.position.set(-30,5,-30);
+  bluenpc.scale.set(1,2,4);
+  bluenpc.addEventListener('collision',
+  function showEating (other_object)
+  {
+    if(other_object == blueAvatar)
+    {
+      gameState.Bluehealth -= 1;
+      bluenpc.__dirtyPosition = true;
+      bluenpc.position.set(randN(30), randN(20), randN(40)); //add one to the Score
+    }
+    if (gameState.Bluehealth==0) {
+      gameState.scene='lose2';
+    }
+  })
+  scene.add(bluenpc);
+  }
+
 function randN(n)
 {
 	return Math.random()*n;
@@ -262,7 +281,7 @@ function addPurpleBalls()
 		ball.addEventListener( 'collision',
 		function( other_object, relative_velocity, relative_rotation, contact_normal )
 		{
-			if (other_object==blueNet)
+      if (other_object==blueNetB )
 			{
 				console.log("ball "+i+" hit blueNet");
 				gameState.ScoreBlue += 1;  // add one to the score
@@ -274,7 +293,7 @@ function addPurpleBalls()
 				this.position.y = this.position.y - 100;
 				this.__dirtyPosition = true;
 			}
-			if (other_object==redNet)
+      if (other_object==redNetB)
 			{
 				console.log("ball "+i+" hit redNet");
 				gameState.ScoreRed += 1;  // add one to the score
@@ -303,24 +322,29 @@ function createBall(color)
 }
 function createNet(color)
 {
-	var geometry = new THREE.BoxGeometry(30, 8, 10);
+	var geometry = new THREE.BoxGeometry(30, 2, 9.5);
 	var texture = new THREE.TextureLoader().load( '../images/net.jpg' );
 	texture.wrapS = THREE.RepeatWrapping;
 	texture.wrapT = THREE.RepeatWrapping;
-	texture.repeat.set( 4, 4 );
+	texture.repeat.set( 1, 1 );
 	var material = new THREE.MeshLambertMaterial( { color: color,  map: texture ,side:THREE.DoubleSide} );
 	var pmaterial = new Physijs.createMaterial(material,0.9,0.5);
 	var meshNet = new Physijs.BoxMesh(geometry, pmaterial,0);
 	meshNet.castShadow = true;
 	return meshNet;
 }
-
-
-// ...
-
-function clearScene() {
-    scene.set(main)
-	
+function createNetB(color)
+{
+  var geometry = new THREE.CylinderGeometry( 12, 12, 30, 3, 0, false, 3, 1.5 );
+  var texture = new THREE.TextureLoader().load( '../images/net.jpg' );
+	texture.wrapS = THREE.RepeatWrapping;
+	texture.wrapT = THREE.RepeatWrapping;
+	texture.repeat.set( 1, 1 );
+	var material = new THREE.MeshLambertMaterial( { color: color,  map: texture ,side:THREE.DoubleSide} );
+	var pmaterial = new Physijs.createMaterial(material,0.9,0.5);
+	var meshNet = new Physijs.BoxMesh(geometry, pmaterial,0);
+	meshNet.castShadow = true;
+	return meshNet;
 }
 function initControls()
 {
@@ -376,12 +400,7 @@ function keydown(event)
     case "p": controls.speedred = 30; break;
     case "l": controls.downred = true; break;
     case "k": controls.flyred = true; break;
-	case "j": controls.resetred = true; break;
-	case "p":	gameState.score = 0;
-				gameState.health = 10;
-				scene.add(createBall());
-				break;
-	 
+    case "j": controls.resetred = true; break;
 	}
 }
 function keyup(event)
@@ -466,21 +485,23 @@ function updateAvatarB(avatar) //edited here so both avatars will move
       avatar.position.set(40,10,40);
     }
 	}
-function updateNPC()
-{
-	if (redAvatar.position.distanceTo(npc.position) <= 20)
-	{
-		npc.__dirtyPosition = true;
-		npc.lookAt(redAvatar.position);
-		npc.setLinearVelocity(npc.getWorldDirection().multiplyScalar(0.5))
-	}
-	if (blueAvatar.position.distanceTo(npc.position) <= 20)
-	{
-		npc.__dirtyPosition = true;
-		npc.lookAt(blueAvatar.position);
-		npc.setLinearVelocity(npc.getWorldDirection().multiplyScalar(0.5))
-	}
-}
+  function updateredNPC()
+  {
+
+  		rednpc.__dirtyPosition = true;
+  		rednpc.lookAt(redAvatar.position);
+  		rednpc.setLinearVelocity(rednpc.getWorldDirection().multiplyScalar(0.5))
+
+  }
+  function updateblueNPC()
+  {
+
+  		bluenpc.__dirtyPosition = true;
+  		bluenpc.lookAt(blueAvatar.position);
+  		bluenpc.setLinearVelocity(bluenpc.getWorldDirection().multiplyScalar(0.5))
+
+  }
+
 function animate()
 {
 	requestAnimationFrame( animate );
@@ -503,7 +524,8 @@ function animate()
 		case "main":
     updateAvatarB(blueAvatar);
     updateAvatarR(redAvatar);
-		updateNPC();
+    updateredNPC();
+		updateblueNPC();
 	    scene.simulate();
 		if (gameState.camera!= 'none')
 		{
