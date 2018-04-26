@@ -577,13 +577,22 @@ function initControls()
 function keydown(event)
 {
 	console.log("Keydown:"+event.key);
-	if ((gameState.scene == 'win2' && event.key=='r')||(gameState.scene == 'lose2' && event.key=='r'))
-    {
-		gameState.scene = 'main';
-		gameState.score = 0;
-		gameState.health = 10;
-		return;
-	}
+	// if ((gameState.scene == 'win2' && event.key=='r')||(gameState.scene == 'lose2' && event.key=='r'))
+  //   {
+	// 	gameState.scene = 'main';
+	// 	gameState.score = 0;
+	// 	gameState.health = 10;
+	// 	return;
+	// }
+  if (event.key=='r')
+     {
+       gameState.scene= 'start3'
+       ScoreBlue =0;
+       ScoreRed= 0;
+       Bluehealth = 10;
+       Redhealth:10
+	 	return;
+	 }
 	if (gameState.scene == 'start3' && event.key=='p')
     {
 		gameState.scene = 'main';
