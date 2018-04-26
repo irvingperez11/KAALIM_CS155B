@@ -1,7 +1,5 @@
 /*
-This is the finished version of PA3 by team KAALIM
-It is a soccer game played by two avatars, red vs. blue, trying to get the balls into their colored goals
-First player to get a score of 5 in their color wins without being killed by the NPC!!
+This is the final project for team KAALIM
 */
 // First we declare the variables that hold the objects we need
 // in the animation code
@@ -108,39 +106,39 @@ function createMainScene()
 	blueAvatar.translateY(20);
 	blueAvatar.translateX(-20);
 	blueAvatarCam.translateY(-4);
-	blueAvatarCam.translateZ(3);
+	blueAvatarCam.translateZ(2);
 	scene.add(blueAvatar);
 	gameState.camera = blueAvatarCam;
-	//creates the red avatar, no controls yet, button 3 for his camera
+	//creates the red avatar, button 3 for his camera
 	redAvatarCam = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.1, 1000 );
 	redAvatar = createRedAvatar();
 	redAvatar.translateY(20);
 	redAvatar.translateX(20);
 	redAvatarCam.translateY(-4);
-	redAvatarCam.translateZ(3);
+	redAvatarCam.translateZ(2);
 	scene.add(redAvatar);
 	//time to add balls
 	addPurpleBalls(); //for the both avatars to play with
 	//add in the nets
-  blueNetB = createNetB(0x44b4e2);
-  blueNetB._dirtyPosition = true;
-  blueNetB.position.set(51,-3,0);
-  blueNetB.rotateX(Math.PI/2);
-  blueNetB.rotateZ(Math.PI);
-  scene.add(blueNetB);
+    blueNetB = createNetB(0x44b4e2);
+    blueNetB._dirtyPosition = true;
+    blueNetB.position.set(75,-3,0);
+    blueNetB.rotateX(Math.PI/2);
+    blueNetB.rotateZ(Math.PI);
+    scene.add(blueNetB);
 
-  redNetB = createNetB(0xfa2a2a);
-  redNetB._dirtyPosition = true;
-  redNetB.position.set(-51,-3,0);
-  redNetB.rotateY(Math.PI);
-  redNetB.rotateX(Math.PI/2);
-  redNetB.rotateZ(Math.PI);
-  scene.add(redNetB);
-  rednpc = createBoxMesh(0xfa2a2a);
-  bluenpc= createBoxMesh(0x44b4e2);
-  rednpc.position.set(30,5,-30);
-  rednpc.scale.set(1,2,4);
-  rednpc.addEventListener('collision',
+    redNetB = createNetB(0xfa2a2a);
+    redNetB._dirtyPosition = true;
+    redNetB.position.set(-75,-3,0);
+    redNetB.rotateY(Math.PI);
+    redNetB.rotateX(Math.PI/2);
+    redNetB.rotateZ(Math.PI);
+    scene.add(redNetB);
+    rednpc = createBoxMesh(0xfa2a2a);
+    bluenpc= createBoxMesh(0x44b4e2);
+    rednpc.position.set(30,5,-30);
+    rednpc.scale.set(1,2,4);
+    rednpc.addEventListener('collision',
     function showEating (other_object)
     {
       if(other_object == redAvatar)
@@ -217,6 +215,24 @@ function createBoxMesh(color)
 	mesh.castShadow = true;
 	return mesh;
 }
+function createCyclinderMesh(color)
+{
+	var geometry = new THREE.CylinderGeometry( 1, 1, 3, 16);
+	var material = new THREE.MeshLambertMaterial( { color: color});
+	mesh = new Physijs.BoxMesh(geometry,material);
+	mesh.castShadow = true;
+	return mesh;
+}
+function createSphereMesh(color)
+{
+	var geometry = new THREE.SphereGeometry(2,16,32);
+	var texture = new THREE.TextureLoader().load( '../images/sky.jpg');
+	var material = new THREE.MeshLambertMaterial( { color: color, map:texture, side:THREE.DoubleSide});
+	//var material = new THREE.MeshLambertMaterial( {color : color});
+	mesh = new Physijs.BoxMesh(geometry,material);
+	mesh.position.set(0,4.5,0);
+	return mesh;
+}
 function createGround(image)
 {
 	// creating the ground to build on
@@ -245,8 +261,7 @@ function createStartBox(image,k)
 }
 function createBlueAvatar()
 {
-	//this is just temporarily a box avatar for playing with and testing
-	var geometry = new THREE.CylinderGeometry( 4, 4, 6, 16);
+    var geometry = new THREE.CylinderGeometry( 3, 3, 6, 32);
 	var material = new THREE.MeshLambertMaterial( { color: 0x44b4e2} );
 	var pmaterial = new Physijs.createMaterial(material,0.9,0.5);
 	var mesh = new Physijs.BoxMesh( geometry, pmaterial );
@@ -255,11 +270,19 @@ function createBlueAvatar()
 	blueAvatarCam.position.set(0,4,0);
 	blueAvatarCam.lookAt(0,4,10);
 	mesh.add(blueAvatarCam);
+	var armRight = createCyclinderMesh(0xffffff);
+	armRight.position.set(4,0,0.5);
+	mesh.add(armRight);
+	var armLeft = createCyclinderMesh(0xffffff);
+	armLeft.position.set(-4,0,0.5);
+	mesh.add(armLeft);
+	var head = createSphereMesh(0xffffff);
+	mesh.add(head);
 	return mesh;
 }
 function createRedAvatar()
 {
-	var geometry = new THREE.CylinderGeometry( 4, 4, 6, 16);
+    var geometry = new THREE.CylinderGeometry( 3, 3, 6, 16);
 	var material = new THREE.MeshLambertMaterial( { color: 0xfa2a2a} );
 	var pmaterial = new Physijs.createMaterial(material,0.9,0.5);
 	var mesh = new Physijs.BoxMesh( geometry, pmaterial );
@@ -268,6 +291,14 @@ function createRedAvatar()
 	redAvatarCam.position.set(0,4,0);
 	redAvatarCam.lookAt(0,4,10);
 	mesh.add(redAvatarCam);
+    var armRight = createCyclinderMesh(0xffffff);
+    armRight.position.set(4,0,0.5);
+    mesh.add(armRight);
+    var armLeft = createCyclinderMesh(0xffffff);
+    armLeft.position.set(-4,0,0.5);
+    mesh.add(armLeft);
+    var head = createSphereMesh(0xff0000);
+    mesh.add(head);
 	return mesh;
 }
 function addPurpleBalls()
