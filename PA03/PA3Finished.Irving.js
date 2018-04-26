@@ -364,6 +364,10 @@ function keydown(event)
   case "l": controls.downred = true; break;
   case "k": controls.flyred = true; break;
   case "j": controls.resetred = true; break;
+  case "F5": while(scene.children.length > 0){ 
+   			 scene.remove(scene.children[0]); 
+			}
+			break;
 	}
 }
 function keyup(event)
